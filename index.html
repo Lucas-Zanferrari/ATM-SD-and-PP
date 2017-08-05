@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>ATM Client</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+    </head>
+
+    <body class="container-fluid">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">ATM Client</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <section id="main" class="container">
+            
+        </section>
+
+        <!-- Scripts -->
+        <script src="lib/jquery/jquery-3.2.1.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $.get("http://172.31.54.80:9000/v1/banks/", function(data){
+                    $.each(data, function(i, item){
+                        $('#main').append('<div class="col-md-3"><div class="item col-md-10 col-offset-md-1"><a href="account.html?bank='+item.id+'">'+item.name+'</a></div></div>');
+                    });
+                });
+            });
+        </script>
+
+    </body>
+</html>

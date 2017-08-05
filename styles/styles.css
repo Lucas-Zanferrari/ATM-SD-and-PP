@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css?family=Hind+Guntur:300,400");
+body {
+  padding: 0 !important;
+}
+
+body header nav {
+  font: 300 14px 'Hind Guntur';
+  border-radius: 0 !important;
+}
+
+body header nav .navbar-brand {
+  background: #E74C3C !important;
+  color: #fff !important;
+  padding: 18px;
+  margin-right: 15px;
+}
+
+body header nav ul li a {
+  padding: 18px 15px 0 !important;
+}
+
+body #account button, body #account input, body #account label {
+  margin-top: 20px;
+  border-radius: 0;
+}
+
+body section {
+  margin-top: 5vh;
+}
+
+body section .item {
+  position: relative;
+  height: 25vh;
+  margin-bottom: 20px;
+  transition: filter 0.25s linear;
+  background: #2C3E50;
+}
+
+body section .item:hover {
+  filter: brightness(140%);
+}
+
+body section .item a {
+  bottom: 10;
+  right: 10;
+  position: absolute;
+  color: #fff;
+  font: 300 16px 'Hind Guntur';
+  text-align: right;
+  line-height: 18px;
+}
+
+body section .item a:hover {
+  text-decoration: none;
+}
+
+body #operations-container div {
+  display: none;
+}
+
+body #operations-container #saque .saldo-disponivel, body #operations-container #deposito .saldo-disponivel, body #operations-container #consulta .saldo-disponivel {
+  color: #29A82E;
+}
+
+body #operations-container #saque button, body #operations-container #deposito button, body #operations-container #consulta button {
+  background: #E74C3C !important;
+  border: 1px solid #E74C3C;
+  transition: filter 0.2s linear;
+  font-weight: normal;
+}
+
+body #operations-container #saque button:hover, body #operations-container #deposito button:hover, body #operations-container #consulta button:hover {
+  filter: brightness(110%);
+}
+
+body #operations-container #saque input, body #operations-container #saque button, body #operations-container #deposito input, body #operations-container #deposito button, body #operations-container #consulta input, body #operations-container #consulta button {
+  border-radius: 0;
+  margin-top: 20px;
+}
+
+body #operations-container #deposito button {
+  background: #29A82E !important;
+  border: 1px solid #29A82E;
+}
+
+body #operations-container #consulta p {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+body #operations-container #consulta button {
+  margin-right: 10px;
+}
+
+body #operations-container #consulta .transf {
+  background: #2980B9 !important;
+  border: 1px solid #2980B9;
+}
+
+body #operations-container #consulta .deposito {
+  background: #29A82E !important;
+  border: 1px solid #29A82E;
+}
+
+body #operations-container #transferencia input[type=text], body #operations-container #transferencia input[type=number], body #operations-container #transferencia select, body #operations-container #transferencia button {
+  margin-bottom: 20px;
+  border-radius: 0 !important;
+  -webkit-appearance: none;
+}
+
+body #operations-container #transferencia button {
+  background: #2980B9 !important;
+  border: 1px solid #2980B9;
+  transition: filter 0.2s linear;
+  font-weight: normal;
+}
+
+body #operations-container #transferencia button:hover {
+  filter: brightness(110%);
+}

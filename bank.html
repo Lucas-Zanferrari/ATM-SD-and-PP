@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <title>ATM Client</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+    </head>
+
+    <body class="container-fluid">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#"></a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" onclick="showContent('saque');"><i class="fa fa-level-down"></i> Novo Saque</a></li>
+                        <li><a href="#" onclick="showContent('deposito');"><i class="fa fa-level-up"></i> Novo Depósito</a></li>
+                        <li><a href="#" onclick="showContent('consulta');"><i class="fa fa-money"></i> Consultar Saldo</a></li>
+                        <li><a href="#" onclick="showContent('transferencia');"><i class="fa fa-exchange"></i> Transferência entre contas</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="index.html"><i class="fa fa-bank"></i> Selecionar outro banco</a></li>
+                    </ul>
+
+                </div>
+            </nav>
+        </header>
+
+        <section class="container">
+            <div class="col-md-3">
+                <div class="item col-md-11 col-offset-md-1" style="background: #2980B9;">
+                    <a href="#" onclick="showContent('saque');"><i class="fa fa-plus-square"></i> Novo Saque</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item col-md-11 col-offset-md-1" style="background: #3498DB;">
+                    <a href="#" onclick="showContent('deposito');"><i class="fa fa-plus-square"></i> Novo Depósito</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item col-md-11 col-offset-md-1" style="background: #2980B9;">
+                    <a href="#" onclick="showContent('consulta');"><i class="fa fa-search"></i> Consultar Saldo</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item col-md-11 col-offset-md-1" style="background: #3498DB;">
+                    <a href="#" onclick="showContent('transferencia');"><i class="fa fa-exchange"></i> Transferência entre<br>contas</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="operations-container" class="container">
+            <div class="col-md-12 well" id="saque">
+                <h2>Saque</h2>
+                <form class="col-md-4">
+                    <label>Seu saldo atual: </label> <span class="saldo-disponivel"> <i class="fa fa-plus-circle"></i> R$ 1000</span>
+                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor do saque (R$)" >
+                    <button type="button" class="btn btn-primary btn-md">Efetuar saque</button>
+                </form>
+            </div>
+
+            <div class="col-md-12 well" id="deposito">
+                <h2>Depósito</h2>
+                <form class="col-md-4">
+                    <label>Seu saldo atual: </label> <span class="saldo-disponivel"> <i class="fa fa-plus-circle"></i> R$ 1000</span>
+                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor do depósito (R$)" >
+                    <button type="button" class="btn btn-primary btn-md">Depositar valor</button>
+                </form>
+            </div>
+
+            <div class="col-md-12 well" id="consulta">
+                <h2>Consulta de Saldo</h2>
+                <p>Seu saldo atual é de <span class="saldo-disponivel"><i class="fa fa-plus-circle"></i> R$ 1000</span></p>
+                <button type="button" class="btn btn-primary btn-md saque" onclick="showContent('saque');">Realizar novo saque</button>
+                <button type="button" class="btn btn-primary btn-md deposito" onclick="showContent('deposito');">Realizar novo depósito</button>
+                <button type="button" class="btn btn-primary btn-md transf" onclick="showContent('transferencia');">Efetuar transferência entre contas</button>
+
+            </div>
+
+            <div class="col-md-12 well" id="transferencia">
+                <h2>Transferência entre contas</h2>
+                <form class="col-md-6">
+                    <p><b>Escolha o tipo de transferência:</b></p>
+                    <span class="col-md-12" style="margin-bottom: 20px;">
+                        <label class="radio-inline"><input type="radio" name="tipotransf" value="sameBank" checked>Contas do mesmo banco</label>
+                        <label class="radio-inline"><input type="radio" name="tipotransf" value="diffBank">Contas de bancos distintos</label>
+                    </span>
+
+                    <label>Sua Conta</label>
+                    <input type="number" class="form-control">
+
+                    <label>Conta do destinatário</label>
+                    <input type="text" class="form-control">
+                    
+                    <span class="banco-destinatario" style="display: none;">
+                        <label>Banco do destinatário</label>
+                        <select class="form-control" id="sel1">
+                            <option>Banco X</option>
+                            <option>Banco Y</option>
+                        </select>
+                    </span>
+
+                    <label>Valor da Transferência</label>
+                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor da transferência (R$)" >
+                    <button type="button" class="btn btn-primary btn-md">Transferir valor</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Scripts -->
+        <script src="lib/jquery/jquery-3.2.1.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
+        <script>
+            var showContent = function(content){
+                $('#operations-container > div').each(function(){
+                    if($(this).is(":visible"))
+                        $(this).hide();
+                });
+                $("#"+content).show();
+            }
+
+            $(document).ready(function(){
+                var bank = getUrlParameter('bank');
+                var account = getUrlParameter('account');
+
+                if(bank != null && account != null){
+                    $.get("http://172.31.54.80:9000/v1/banks/"+bank, function(data){
+                        $('.navbar-brand').html("ATM Client - Banco "+data['name']);
+                    })
+                }else{
+                    //window.location = "index.html";
+                }
+
+                /* Validação Transferência Form */
+
+                $('input[name=tipotransf]').change(function(){
+                    if($(this).val() == 'diffBank')
+                        $('.banco-destinatario').show();
+                    else
+                        $('.banco-destinatario').hide();
+                });
+            });
+            
+        </script>
+
+
+     </body>
+</html>

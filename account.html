@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>ATM Client</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+    </head>
+
+    <body class="container-fluid">
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">ATM Client</a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="index.html"><i class="fa fa-bank"></i> Trocar de banco</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <section id="account" class="container">
+            <div class="col-md-6 well col-md-offset-3">
+                <h2>Seja bem vindo ao Banco <span class="banco-nome">X</span></h2>
+                <form name="login" action="javascript: validadeForm();">
+                    <label>Entre com o número da sua conta para acessar as funções do banco</label>
+                    <input class="form-control" name="account" type="number" pattern="[0-9]" step="1" placeholder="Número da Conta" >
+                    <input type="submit" class="btn btn-primary btn-md" value="Entrar no banco" />
+                </form>
+            </div>
+        </section>
+
+        <!-- Scripts -->
+        <script src="lib/jquery/jquery-3.2.1.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
+
+        <script>
+            var bank = getUrlParameter('bank');
+
+            var validadeForm = function(){
+                window.location = 'bank.html?bank='+bank+'&account='+$('input[name=account]').val();
+            }
+                
+            if(bank != null){
+
+            }else{
+                window.location = 'index.html';
+            }
+
+        </script>
+    </body>
+</html>

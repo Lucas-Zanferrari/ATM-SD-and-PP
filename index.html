@@ -28,7 +28,7 @@
 
         <script>
             $(document).ready(function(){
-                $.get("http://172.31.54.80:9000/v1/banks/", function(data){
+                $.get("http://localhost:8000/v1/banks/", function(data){
                     $.each(data, function(i, item){
                         $('#main').append('<div class="col-md-3"><div class="item col-md-10 col-offset-md-1"><a href="account.html?bank='+item.id+'">'+item.name+'</a></div></div>');
                     });

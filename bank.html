@@ -29,6 +29,8 @@
         </header>
 
         <section class="container">
+            <h1>Seja bem vindo, <span class="client-name"></span>. <br><br></h1>
+            
             <div class="col-md-3">
                 <div class="item col-md-11 col-offset-md-1" style="background: #2980B9;">
                     <a href="#" onclick="showContent('saque');"><i class="fa fa-plus-square"></i> Novo Saque</a>
@@ -96,10 +98,7 @@
                     
                     <span class="banco-destinatario" style="display: none;">
                         <label>Banco do destinatário</label>
-                        <select class="form-control" id="sel1">
-                            <option>Banco X</option>
-                            <option>Banco Y</option>
-                        </select>
+                        <select class="form-control" id="sel1"></select>
                     </span>
 
                     <label>Valor da Transferência</label>
@@ -119,31 +118,51 @@
                     if($(this).is(":visible"))
                         $(this).hide();
                 });
+                
+                if(content == 'transferencia'){
+                    for(key in bankList){
+                        $('#sel1').append($('<option>', {
+                            value: key,
+                            text: bankList[key]
+                        }));
+                    }
+                }
+
                 $("#"+content).show();
             }
 
-            $(document).ready(function(){
-                var bank = getUrlParameter('bank');
-                var account = getUrlParameter('account');
+            var bank = getUrlParameter('bank');
+            var account = getUrlParameter('account');
+            var balance; var name; var bankList = {};
 
-                if(bank != null && account != null){
-                    $.get("http://172.31.54.80:9000/v1/banks/"+bank, function(data){
-                        $('.navbar-brand').html("ATM Client - Banco "+data['name']);
-                    })
-                }else{
-                    //window.location = "index.html";
-                }
-
-                /* Validação Transferência Form */
-
-                $('input[name=tipotransf]').change(function(){
-                    if($(this).val() == 'diffBank')
-                        $('.banco-destinatario').show();
-                    else
-                        $('.banco-destinatario').hide();
+            if(bank != null && account != null){
+                $.get("http://localhost:8000/v1/banks/", function(data){
+                    $(data).each(function(i, item){
+                        if(item.id == bank)
+                            $('.navbar-brand').html("ATM Client - " + item.name);
+                        
+                        bankList[item.id] = item.name;
+                    });
                 });
+
+
+                $.get("http://localhost:9000/v1/clients/" + account, function(data){
+                    balance = data['balance'];
+                    name = data['name'];
+                    $('.client-name').html(name);
+                    $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                });
+            }else{
+                window.location = "index.html";
+            }
+            /* Validação Transferência Form */
+
+            $('input[name=tipotransf]').change(function(){
+                if($(this).val() == 'diffBank')
+                    $('.banco-destinatario').show();
+                else
+                    $('.banco-destinatario').hide();
             });
-            
         </script>
 
 

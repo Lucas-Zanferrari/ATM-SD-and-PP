@@ -12,7 +12,7 @@
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#">ATM Client</a>
+                        <a class="navbar-brand" href="#">ATM Client - <span class="bank-name"></span></a>
                     </div>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="index.html"><i class="fa fa-bank"></i> Trocar de banco</a></li>
@@ -39,13 +39,24 @@
 
         <script>
             var bank = getUrlParameter('bank');
+            var bankName;
 
             var validadeForm = function(){
-                window.location = 'bank.html?bank='+bank+'&account='+$('input[name=account]').val();
+                $.get('http://localhost:9000/v1/clients/' + $('input[name=account]').val(), function(data){
+                    if(data != null)
+                        window.location = 'bank.html?bank='+bank+'&account='+$('input[name=account]').val();
+                    else
+                        alert("Conta não encontrada no banco!");
+                });
+                
             }
                 
             if(bank != null){
-
+                $.get("http://localhost:8000/v1/banks/" + bank, function(data){
+                    bankName = data['name'];
+                    $('.banco-nome').html(bankName);
+                    $('.bank-name').html(bankName);
+                });
             }else{
                 window.location = 'index.html';
             }

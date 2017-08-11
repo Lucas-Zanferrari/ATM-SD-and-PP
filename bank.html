@@ -56,19 +56,19 @@
         <section id="operations-container" class="container">
             <div class="col-md-12 well" id="saque">
                 <h2>Saque</h2>
-                <form class="col-md-4">
+                <form action="javascript: saque($('#saque-input').val());" class="col-md-4">
                     <label>Seu saldo atual: </label> <span class="saldo-disponivel"> <i class="fa fa-plus-circle"></i> R$ 1000</span>
-                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor do saque (R$)" >
-                    <button type="button" class="btn btn-primary btn-md">Efetuar saque</button>
+                    <input class="form-control" id="saque-input" type="number" min="1" step="0.01" placeholder="Valor do saque (R$)" >
+                    <input type="submit" value="Efetuar Saque" class="btn btn-primary btn-md" />
                 </form>
             </div>
 
             <div class="col-md-12 well" id="deposito">
                 <h2>Depósito</h2>
-                <form class="col-md-4">
+                <form action="javascript: deposito($('#deposito-input').val());" class="col-md-4">
                     <label>Seu saldo atual: </label> <span class="saldo-disponivel"> <i class="fa fa-plus-circle"></i> R$ 1000</span>
-                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor do depósito (R$)" >
-                    <button type="button" class="btn btn-primary btn-md">Depositar valor</button>
+                    <input class="form-control" id="deposito-input" type="number" min="1" step="0.01" placeholder="Valor do depósito (R$)" >
+                    <input type="submit" class="btn btn-primary btn-md" value="Depositar Valor" />
                 </form>
             </div>
 
@@ -83,27 +83,25 @@
 
             <div class="col-md-12 well" id="transferencia">
                 <h2>Transferência entre contas</h2>
-                <form class="col-md-6">
+                <form id="transferencia-form" class="col-md-6" action="javascript: transferencia($('#conta-input').val(), $('#sel1').val(), $('#tvalor-input').val());">
+                    <label>Seu saldo atual: </label> <span class="saldo-disponivel"> <i class="fa fa-plus-circle"></i> R$ 1000</span>
                     <p><b>Escolha o tipo de transferência:</b></p>
                     <span class="col-md-12" style="margin-bottom: 20px;">
                         <label class="radio-inline"><input type="radio" name="tipotransf" value="sameBank" checked>Contas do mesmo banco</label>
                         <label class="radio-inline"><input type="radio" name="tipotransf" value="diffBank">Contas de bancos distintos</label>
                     </span>
 
-                    <label>Sua Conta</label>
-                    <input type="number" class="form-control">
-
-                    <label>Conta do destinatário</label>
-                    <input type="text" class="form-control">
-                    
                     <span class="banco-destinatario" style="display: none;">
                         <label>Banco do destinatário</label>
                         <select class="form-control" id="sel1"></select>
                     </span>
 
+                    <label>Conta do destinatário</label>
+                    <input type="text" class="form-control" id="conta-input">                    
+
                     <label>Valor da Transferência</label>
-                    <input class="form-control" type="number" min="1" step="0.01" placeholder="Valor da transferência (R$)" >
-                    <button type="button" class="btn btn-primary btn-md">Transferir valor</button>
+                    <input class="form-control" type="number" id="tvalor-input" min="1" step="0.01" placeholder="Valor da transferência (R$)" >
+                    <input type="submit" class="btn btn-primary btn-md" value="Transferir Valor" />
                 </form>
             </div>
         </section>
@@ -131,38 +129,86 @@
                 $("#"+content).show();
             }
 
+            /* Validação Transferência Form */
+            $('input[name=tipotransf]').change(function(){
+                if($(this).val() == 'diffBank'){
+                    $('.banco-destinatario').show();
+                }else{
+                    $('.banco-destinatario').hide();
+                }
+                    
+            });
+
+
             var bank = getUrlParameter('bank');
             var account = getUrlParameter('account');
-            var balance; var name; var bankList = {};
+            var balance; var name; var bankHost; var bankList = {};
 
             if(bank != null && account != null){
-                $.get("http://localhost:8000/v1/banks/", function(data){
+                $.get("http://localhost:8000/v1/bancos/", function(data){
                     $(data).each(function(i, item){
-                        if(item.id == bank)
+                        if(item.id == bank){
                             $('.navbar-brand').html("ATM Client - " + item.name);
-                        
+                            bankHost = item.host;
+                        }
                         bankList[item.id] = item.name;
                     });
+
+                    $.get("http://"+bankHost+"/v1/clientes/" + account, function(data){
+                        balance = data['balance'];
+                        name = data['name'];
+                        $('.client-name').html(name);
+                        $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                    });
+
                 });
 
-
-                $.get("http://localhost:9000/v1/clients/" + account, function(data){
-                    balance = data['balance'];
-                    name = data['name'];
-                    $('.client-name').html(name);
-                    $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
-                });
             }else{
                 window.location = "index.html";
             }
-            /* Validação Transferência Form */
 
-            $('input[name=tipotransf]').change(function(){
-                if($(this).val() == 'diffBank')
-                    $('.banco-destinatario').show();
-                else
-                    $('.banco-destinatario').hide();
-            });
+            saque = function(n){
+                if(n <= balance){
+                    $.post("http://"+bankHost+"/v1/clientes/"+account+"/saque/"+n, function(data){
+                        alert("R$ "+ n + " sacado de sua conta com sucesso!");
+                        balance = data["balance"];
+                        $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                    })
+                }else{
+                    alert("Valor de Saque é maior que seu saldo!");
+                }
+            }
+
+            deposito = function(n){
+                $.post("http://"+bankHost+"/v1/clientes/"+account+"/deposito/"+n, function(data){
+                    alert("R$ "+ n + " depositado em sua conta!");
+                    balance = data["balance"];
+                    $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                })
+            }
+
+            transferencia = function(r, b, n){
+                if(n <= balance){
+                    if($("input[name=tipotransf]:checked").val() == "sameBank"){
+                        $.post("http://"+bankHost+"/v1/clientes/"+account+"/transferencia/"+r+"/"+n, function(data){
+                            alert("R$ "+ n + " depositado da conta #"+account+" para conta #"+r+" com sucesso!");
+                            balance = balance - n;
+                            $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                        });
+                    }else{
+                        $.post("http://"+bankHost+"/v1/clientes/"+account+"/TED/"+b+"/"+r+"/"+n, function(data){
+                            alert("R$ "+ n + " depositado da conta #"+account+" para conta #"+r+" com sucesso!");
+                            balance = balance - n;
+                            $('.saldo-disponivel').html('<i class="fa fa-plus-circle"></i> R$ ' + balance);
+                        });
+                    }
+                }else{
+                    alert("Valor de Transferência é maior que seu saldo!");
+                }
+                
+            }
+
+
         </script>
 
 

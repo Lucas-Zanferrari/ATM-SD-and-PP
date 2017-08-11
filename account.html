@@ -39,21 +39,22 @@
 
         <script>
             var bank = getUrlParameter('bank');
-            var bankName;
+            var bankName; var bankHost;
 
             var validadeForm = function(){
-                $.get('http://localhost:9000/v1/clients/' + $('input[name=account]').val(), function(data){
-                    if(data != null)
-                        window.location = 'bank.html?bank='+bank+'&account='+$('input[name=account]').val();
-                    else
-                        alert("Conta não encontrada no banco!");
-                });
-                
+                $.get('http://'+bankHost+'/v1/clientes/' + $('input[name=account]').val())
+                .fail(function(jqXHR, textStatus, errorThrown){
+                    alert("Conta não encontrada, tente novamente!");
+                })
+                .done(function(data){
+                    window.location = "bank.html?bank=" + bank + "&account=" + data['id'];
+                })
             }
                 
             if(bank != null){
-                $.get("http://localhost:8000/v1/banks/" + bank, function(data){
+                $.get("http://localhost:8000/v1/bancos/" + bank, function(data){
                     bankName = data['name'];
+                    bankHost = data['host'];
                     $('.banco-nome').html(bankName);
                     $('.bank-name').html(bankName);
                 });

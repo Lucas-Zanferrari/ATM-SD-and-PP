@@ -52,7 +52,7 @@
             }
                 
             if(bank != null){
-                $.get("http://localhost:8000/v1/bancos/" + bank, function(data){
+                $.get("http://localhost:9000/v1/bancos/" + bank, function(data){
                     bankName = data['name'];
                     bankHost = data['host'];
                     $('.banco-nome').html(bankName);
